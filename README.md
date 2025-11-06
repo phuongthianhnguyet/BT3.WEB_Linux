@@ -13,9 +13,9 @@ mariadb (3306), phpmyadmin (8080), nodered/node-red (1880), influxdb (8086), gra
 
 4. Lập trình web frontend+backend:
 
-4.1 Web thương mại điện tử
+   4.1 Web thương mại điện tử
 
-4.2 Web IOT: Giám sát dữ liệu IOT.
+   4.2 Web IOT: Giám sát dữ liệu IOT.
 
 5. Nginx làm web-server
    
@@ -68,6 +68,125 @@ Truy cập link: `Ubuntu 22.04.5 LTS – Microsoft Store` để tải ubuntu.
 
 ## 3. Cài đặt các Docker container (dùng file docker-compose.yml)
 Tạo file `docker-compose.yml` để cài đặt các docker container
+
+`version: '3.8'
+services:
+  mariadb:
+    image: mariadb:10.11
+    container_name: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: BanMyPham
+      MYSQL_USER: nguyet
+      MYSQL_PASSWORD: nguyet123
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mariadb/data:/var/lib/mysql
+    networks:
+      - banhang-network
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: root123
+    ports:
+      - "8080:80"
+    depends_on:
+      - mariadb
+    networks:
+      - banhang-network
+
+  nodered:
+    image: nodered/node-red:latest
+    container_name: nodered
+    restart: always
+    environment:
+      - TZ=Asia/Ho_Chi_Minh
+    ports:
+      - "1880:1880"
+    volumes:
+      - ./node-red/data:/data
+    user: "1000:1000"
+    depends_on:
+      - mariadb
+      - influxdb
+    networks:
+      - banhang-network
+    command: >
+      sh -c "
+      npm install -g node-red-node-mysql &&
+      node-red
+      --httpNodeRoot=/api
+      --httpAdminRoot=/nodered
+      --functionGlobalContext.mysql=require('mysql').createPool({host:'mariadb',user:'nguyet',password:'nguyet123',database:'BanMyPham',port:3306,charset:'utf8mb4',connectionLimit:10})
+      --functionGlobalContext.crypto=require('crypto')
+      "
+
+  influxdb:
+    image: influxdb:2.7
+    container_name: influxdb
+    restart: always
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=admin123
+      - DOCKER_INFLUXDB_INIT_ORG=banhang
+      - DOCKER_INFLUXDB_INIT_BUCKET=statistics
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-auth-token
+    ports:
+      - "8086:8086"
+    volumes:
+      - ./influxdb/data:/var/lib/influxdb2
+    networks:
+      - banhang-network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: always
+    environment:
+      - GF_SERVER_HTTP_PORT=3000
+      - GF_SERVER_ROOT_URL=http://phuonganhnguyet.com/grafana
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/data:/var/lib/grafana
+      - ./grafana/config/grafana.ini:/etc/grafana/grafana.ini
+    depends_on:
+      - influxdb
+    networks:
+      - banhang-network
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+      - ./web:/usr/share/nginx/html:ro
+    depends_on:
+      - nodered
+      - grafana
+    networks:
+      - banhang-network
+
+networks:
+  banhang-network:
+    driver: bridge`
+    
 - Sau khi tạo file `docker-compose.yml`, khởi động lại tất cả container bằng cách chạy lệnh `docker compose up -d` trong thư mục chứa file `docker-compose.yml`
 
 <img width="1465" height="219" alt="Ảnh chụp màn hình 2025-11-07 022055" src="https://github.com/user-attachments/assets/4e28ed63-b945-4287-a5de-0f58ea8584ee" />
@@ -76,8 +195,9 @@ Tạo file `docker-compose.yml` để cài đặt các docker container
   
 <img width="1482" height="293" alt="image" src="https://github.com/user-attachments/assets/4d68ae88-b6c9-4e62-8125-77441253bf92" />
 
-## 4. Cấu hình Nginx làm Web-server
-### Bước 1: Tạo file cấu hình `default (1).conf`
+## 4. Cấu hình Docker-compose.
+### Bước 1: Tạo file cấu hình `docker-compose.yml`
+
 ### `172.21.143.29:8080` phpAdmin:
 
 <img width="1789" height="1001" alt="image" src="https://github.com/user-attachments/assets/0a9af839-4733-411a-9feb-11898cc2eb4d" />
@@ -90,9 +210,35 @@ Tạo file `docker-compose.yml` để cài đặt các docker container
 <img width="1914" height="968" alt="image" src="https://github.com/user-attachments/assets/8f73f439-5e12-4379-aa9a-32bb4247f5ac" />
 
 ## 5. Lập trình web Frontend + backend 
-
 ### Các API backend
 - `http://phuonganhnguyet.com/api/san-pham-ban-chay`
 
 <img width="1845" height="965" alt="image" src="https://github.com/user-attachments/assets/cba1c077-0ba2-4c23-89ed-210b15df6d82" />
+
+Wep chính thức: `http://phuonganhnguyet.com`
+
+<img width="1730" height="970" alt="image" src="https://github.com/user-attachments/assets/e8b960ad-4916-4918-91c4-2083cdbe93c3" />
+
+### Node-Red: http://phuonganhnguyet.com/nodered
+
+<img width="1015" height="978" alt="image" src="https://github.com/user-attachments/assets/a0d0599f-394d-49cf-b928-c363688eaab3" />
+ 
+Mariadb
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <img width="1919" height="963" alt="image" src="https://github.com/user-attachments/assets/c459441b-935d-489b-8cd6-4c612333f2a5" />
 
