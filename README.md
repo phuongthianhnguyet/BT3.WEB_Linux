@@ -62,5 +62,21 @@ Truy cập link: `Ubuntu 22.04.5 LTS – Microsoft Store` để tải ubuntu.
 
 <img width="950" height="778" alt="Ảnh chụp màn hình 2025-11-05 181640" src="https://github.com/user-attachments/assets/07d034a9-a303-489f-b248-c10508838d51" />
 
+- Kiểm tra phiên bản docker bằng lệnh :
+- @@@@@
 
+## 3. Cài đặt các Docker container (dùng file docker-compose.yml)
+Tạo file `docker-compose.yml` để cài đặt các docker container
+- Sau khi tạo file `docker-compose.yml`, khởi động lại tất cả container bằng cách chạy lệnh `docker compose up -d` trong thư mục chứa file `docker-compose.yml`
+- 2@@@@
 
+- Kiểm tra container: chạy lệnh `docker ps`
+- @@@@
+## 4. Cấu hình Nginx làm Web-server
+### Bước 1: Tạo file cấu hình `default (1).conf`
+### `172.21.143.29:8080` phpAdmin:
+@@@@
+- Website chính: `http://phuonganhnguyet.com`
+- Granfana: `http://phuonganhnguyet.com/grafana`
+- Node-red: `http://phuonganhnguyet.com/nodered`
+## 5. Lập trình web Frontend + backend 
