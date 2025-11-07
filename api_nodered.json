@@ -1,0 +1,614 @@
+[
+    {
+        "id": "1bf87f6e77d3405f",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "e638380e32bc0ae2",
+        "type": "group",
+        "z": "1bf87f6e77d3405f",
+        "name": "API Tìm Kiếm",
+        "style": {
+            "label": true,
+            "stroke": "#000000",
+            "color": "#000000"
+        },
+        "nodes": [
+            "http_in_tim_kiem",
+            "parse_search_keyword",
+            "db_tim_kiem",
+            "response_tim_kiem"
+        ],
+        "x": 134,
+        "y": 479,
+        "w": 832,
+        "h": 82
+    },
+    {
+        "id": "6e35775f2d5935c4",
+        "type": "group",
+        "z": "1bf87f6e77d3405f",
+        "name": "SP Bán Chạy",
+        "style": {
+            "stroke": "#000000",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "http_in_san_pham_ban_chay",
+            "query_san_pham_ban_chay",
+            "db_san_pham_ban_chay",
+            "response_san_pham_ban_chay",
+            "03627f495fe0a344"
+        ],
+        "x": 134,
+        "y": 39,
+        "w": 972,
+        "h": 142
+    },
+    {
+        "id": "74dc9af58320d5cf",
+        "type": "group",
+        "z": "1bf87f6e77d3405f",
+        "name": "API Lấy Nhóm SP",
+        "style": {
+            "stroke": "#000000",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "query_nhom_san_pham",
+            "http_in_nhom_san_pham",
+            "db_nhom_san_pham",
+            "response_nhom_san_pham"
+        ],
+        "x": 144,
+        "y": 219,
+        "w": 842,
+        "h": 82
+    },
+    {
+        "id": "ebb2c73f22b98d06",
+        "type": "group",
+        "z": "1bf87f6e77d3405f",
+        "name": "API Lấy Sản Phẩm",
+        "style": {
+            "label": true,
+            "stroke": "#000000",
+            "color": "#000000"
+        },
+        "nodes": [
+            "http_in_san_pham_theo_nhom",
+            "parse_nhom_id",
+            "db_san_pham_theo_nhom",
+            "response_san_pham_theo_nhom"
+        ],
+        "x": 134,
+        "y": 339,
+        "w": 842,
+        "h": 82
+    },
+    {
+        "id": "2fa676cfaac5f3d0",
+        "type": "group",
+        "z": "1bf87f6e77d3405f",
+        "name": "API Login",
+        "style": {
+            "stroke": "#000000",
+            "label": true,
+            "color": "#ff0000"
+        },
+        "nodes": [
+            "48a1a34768fba6d4",
+            "901b9a3c1b11f9fa",
+            "534c7e9680afa032",
+            "a78a4bdfb0d040ed",
+            "3b2bc86f1c6aa7ba",
+            "697e7074d66c3efe",
+            "a10d3739c49cce01",
+            "59aa275b06960d0d",
+            "299967b33cfe7a96",
+            "e7f6148a8516b24e"
+        ],
+        "x": 14,
+        "y": 639,
+        "w": 1432,
+        "h": 289.5
+    },
+    {
+        "id": "http_in_tim_kiem",
+        "type": "http in",
+        "z": "1bf87f6e77d3405f",
+        "g": "e638380e32bc0ae2",
+        "name": "GET /tim-kiem",
+        "url": "/tim-kiem",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 230,
+        "y": 520,
+        "wires": [
+            [
+                "parse_search_keyword"
+            ]
+        ]
+    },
+    {
+        "id": "parse_search_keyword",
+        "type": "function",
+        "z": "1bf87f6e77d3405f",
+        "g": "e638380e32bc0ae2",
+        "name": "Parse keyword",
+        "func": "const keyword = msg.req.query.q;\nif (!keyword) {\n    msg.payload = [];\n    return msg;\n}\nconst searchPattern = `%${keyword}%`;\nmsg.topic = \"SELECT * FROM SanPham WHERE TenSP LIKE ? OR MoTaNgan LIKE ? ORDER BY ID\";\nmsg.payload = [searchPattern, searchPattern];\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 520,
+        "wires": [
+            [
+                "db_tim_kiem"
+            ]
+        ]
+    },
+    {
+        "id": "response_tim_kiem",
+        "type": "http response",
+        "z": "1bf87f6e77d3405f",
+        "g": "e638380e32bc0ae2",
+        "name": "200",
+        "statusCode": "200",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 890,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "http_in_san_pham_ban_chay",
+        "type": "http in",
+        "z": "1bf87f6e77d3405f",
+        "g": "6e35775f2d5935c4",
+        "name": "GET /san-pham-ban-chay",
+        "url": "/san-pham-ban-chay",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 270,
+        "y": 80,
+        "wires": [
+            [
+                "query_san_pham_ban_chay"
+            ]
+        ]
+    },
+    {
+        "id": "query_san_pham_ban_chay",
+        "type": "function",
+        "z": "1bf87f6e77d3405f",
+        "g": "6e35775f2d5935c4",
+        "name": "SQL Query",
+        "func": "msg.topic = \"SELECT * FROM SanPham WHERE NoiBat = 1 ORDER BY SoLuongBan DESC LIMIT 10\";\nmsg.payload = [];\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 80,
+        "wires": [
+            [
+                "db_san_pham_ban_chay",
+                "03627f495fe0a344"
+            ]
+        ]
+    },
+    {
+        "id": "response_san_pham_ban_chay",
+        "type": "http response",
+        "z": "1bf87f6e77d3405f",
+        "g": "6e35775f2d5935c4",
+        "name": "200",
+        "statusCode": "200",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 930,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "query_nhom_san_pham",
+        "type": "function",
+        "z": "1bf87f6e77d3405f",
+        "g": "74dc9af58320d5cf",
+        "name": "SQL Query",
+        "func": "msg.topic = \"SELECT * FROM LoaiSanPham ORDER BY ID\";\nmsg.payload = [];\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 260,
+        "wires": [
+            [
+                "db_nhom_san_pham"
+            ]
+        ]
+    },
+    {
+        "id": "http_in_nhom_san_pham",
+        "type": "http in",
+        "z": "1bf87f6e77d3405f",
+        "g": "74dc9af58320d5cf",
+        "name": "GET /nhom-san-pham",
+        "url": "/nhom-san-pham",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 270,
+        "y": 260,
+        "wires": [
+            [
+                "query_nhom_san_pham"
+            ]
+        ]
+    },
+    {
+        "id": "response_nhom_san_pham",
+        "type": "http response",
+        "z": "1bf87f6e77d3405f",
+        "g": "74dc9af58320d5cf",
+        "name": "200",
+        "statusCode": "200",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 910,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "http_in_san_pham_theo_nhom",
+        "type": "http in",
+        "z": "1bf87f6e77d3405f",
+        "g": "ebb2c73f22b98d06",
+        "name": "GET /san-pham",
+        "url": "/san-pham",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 240,
+        "y": 380,
+        "wires": [
+            [
+                "parse_nhom_id"
+            ]
+        ]
+    },
+    {
+        "id": "parse_nhom_id",
+        "type": "function",
+        "z": "1bf87f6e77d3405f",
+        "g": "ebb2c73f22b98d06",
+        "name": "Parse nhom ID",
+        "func": "const nhomId = msg.req.query.nhom;\nif (!nhomId) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'Thiếu tham số nhom' };\n    return null;\n}\nmsg.topic = \"SELECT * FROM SanPham WHERE nhom_id = ? ORDER BY id\";\nmsg.payload = [parseInt(nhomId)];\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 380,
+        "wires": [
+            [
+                "db_san_pham_theo_nhom"
+            ]
+        ]
+    },
+    {
+        "id": "response_san_pham_theo_nhom",
+        "type": "http response",
+        "z": "1bf87f6e77d3405f",
+        "g": "ebb2c73f22b98d06",
+        "name": "200",
+        "statusCode": "200",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 900,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "db_tim_kiem",
+        "type": "mysql",
+        "z": "1bf87f6e77d3405f",
+        "g": "e638380e32bc0ae2",
+        "mydb": "aa6f09801d744578",
+        "name": "Query DB",
+        "x": 690,
+        "y": 520,
+        "wires": [
+            [
+                "response_tim_kiem"
+            ]
+        ]
+    },
+    {
+        "id": "db_san_pham_ban_chay",
+        "type": "mysql",
+        "z": "1bf87f6e77d3405f",
+        "g": "6e35775f2d5935c4",
+        "mydb": "aa6f09801d744578",
+        "name": "Query DB",
+        "x": 730,
+        "y": 80,
+        "wires": [
+            [
+                "response_san_pham_ban_chay",
+                "03627f495fe0a344"
+            ]
+        ]
+    },
+    {
+        "id": "db_nhom_san_pham",
+        "type": "mysql",
+        "z": "1bf87f6e77d3405f",
+        "g": "74dc9af58320d5cf",
+        "mydb": "aa6f09801d744578",
+        "name": "Query DB",
+        "x": 710,
+        "y": 260,
+        "wires": [
+            [
+                "response_nhom_san_pham"
+            ]
+        ]
+    },
+    {
+        "id": "db_san_pham_theo_nhom",
+        "type": "mysql",
+        "z": "1bf87f6e77d3405f",
+        "g": "ebb2c73f22b98d06",
+        "mydb": "aa6f09801d744578",
+        "name": "Query DB",
+        "x": 700,
+        "y": 380,
+        "wires": [
+            [
+                "response_san_pham_theo_nhom"
+            ]
+        ]
+    },
+    {
+        "id": "48a1a34768fba6d4",
+        "type": "http in",
+        "z": "1bf87f6e77d3405f",
+        "g": "2fa676cfaac5f3d0",
+        "name": "POST /login",
+        "url": "/login",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 110,
+        "y": 800,
+        "wires": [
+            [
+                "901b9a3c1b11f9fa"
+            ]
+        ]
+    },
+    {
+        "id": "901b9a3c1b11f9fa",
+        "type": "function",
+        "z": "1bf87f6e77d3405f",
+        "g": "2fa676cfaac5f3d0",
+        "name": "Chuẩn bị data",
+        "func": "let data = msg.payload;\nif (typeof data === 'string') {\n    try { data = JSON.parse(data); } catch(e) {}\n}\n\nconst username = data.ten_dang_nhap;\nconst password = data.mat_khau;\n\nif (!username || !password) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'Thiếu username hoặc password' };\n    return null;\n}\n\nmsg.username = username;\nmsg.password = password;\nmsg.payload = password;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 720,
+        "wires": [
+            [
+                "534c7e9680afa032",
+                "697e7074d66c3efe"
+            ]
+        ]
+    },
+    {
+        "id": "534c7e9680afa032",
+        "type": "exec",
+        "z": "1bf87f6e77d3405f",
+        "g": "2fa676cfaac5f3d0",
+        "command": "echo -n",
+        "addpay": "payload",
+        "append": "| sha256sum | cut -d' ' -f1",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "SHA256 hash",
+        "x": 460,
+        "y": 880,
+        "wires": [
+            [
+                "a78a4bdfb0d040ed"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "a78a4bdfb0d040ed",
+        "type": "function",
+        "z": "1bf87f6e77d3405f",
+        "g": "2fa676cfaac5f3d0",
+        "name": "Xử lý hash",
+        "func": "const hash = msg.payload.trim();\nmsg.password_hash = hash;\nmsg.topic = \"SELECT id, ten_dang_nhap, mat_khau, la_admin FROM NguoiDung WHERE ten_dang_nhap = ?\";\nmsg.payload = [msg.username];\n\nnode.warn(`Username: ${msg.username}`);\nnode.warn(`Hash: ${hash}`);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 740,
+        "wires": [
+            [
+                "3b2bc86f1c6aa7ba",
+                "697e7074d66c3efe"
+            ]
+        ]
+    },
+    {
+        "id": "3b2bc86f1c6aa7ba",
+        "type": "mysql",
+        "z": "1bf87f6e77d3405f",
+        "g": "2fa676cfaac5f3d0",
+        "mydb": "aa6f09801d744578",
+        "name": "Truy Vấn DB",
+        "x": 870,
+        "y": 860,
+        "wires": [
+            [
+                "697e7074d66c3efe",
+                "a10d3739c49cce01"
+            ]
+        ]
+    },
+    {
+        "id": "697e7074d66c3efe",
+        "type": "debug",
+        "z": "1bf87f6e77d3405f",
+        "g": "2fa676cfaac5f3d0",
+        "name": "3️⃣ DB Result",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "complete": "payload",
+        "x": 900,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "a10d3739c49cce01",
+        "type": "function",
+        "z": "1bf87f6e77d3405f",
+        "g": "2fa676cfaac5f3d0",
+        "name": "Verify",
+        "func": "const rows = msg.payload;\n\nif (!rows || rows.length === 0) {\n    msg.statusCode = 401;\n    msg.payload = { error: 'Username không tồn tại' };\n    node.send([null, msg]);\n    return;\n}\n\nconst user = rows[0];\nconst hash_db = user.mat_khau;\nconst hash_input = msg.password_hash;\n\nnode.warn(`DB: ${hash_db}`);\nnode.warn(`Input: ${hash_input}`);\n\nif (hash_db !== hash_input) {\n    msg.statusCode = 401;\n    msg.payload = { error: 'Sai mật khẩu' };\n    node.send([null, msg]);\n    return;\n}\n\nconst token = Buffer.from(JSON.stringify({\n    id: user.id,\n    la_admin: user.la_admin\n})).toString('base64');\n\nmsg.payload = {\n    token: token,\n    la_admin: user.la_admin,\n    user: user.ten_dang_nhap,\n    message: 'Đăng nhập thành công'\n};\n\nnode.send([msg, null]);",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 1070,
+        "y": 760,
+        "wires": [
+            [
+                "59aa275b06960d0d",
+                "299967b33cfe7a96"
+            ],
+            [
+                "e7f6148a8516b24e"
+            ]
+        ]
+    },
+    {
+        "id": "59aa275b06960d0d",
+        "type": "debug",
+        "z": "1bf87f6e77d3405f",
+        "g": "2fa676cfaac5f3d0",
+        "name": "4️⃣ Success",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "complete": "payload",
+        "x": 1320,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "299967b33cfe7a96",
+        "type": "http response",
+        "z": "1bf87f6e77d3405f",
+        "g": "2fa676cfaac5f3d0",
+        "name": "200",
+        "statusCode": "200",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 1330,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "e7f6148a8516b24e",
+        "type": "http response",
+        "z": "1bf87f6e77d3405f",
+        "g": "2fa676cfaac5f3d0",
+        "name": "401",
+        "statusCode": "401",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 1350,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "03627f495fe0a344",
+        "type": "debug",
+        "z": "1bf87f6e77d3405f",
+        "g": "6e35775f2d5935c4",
+        "name": "debug 1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1000,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "aa6f09801d744578",
+        "type": "MySQLdatabase",
+        "name": "",
+        "host": "mariadb",
+        "port": "3306",
+        "db": "BanMyPham",
+        "tz": "",
+        "charset": ""
+    },
+    {
+        "id": "1d4804f916e73abf",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-node-mysql": "2.0.0"
+        }
+    }
+]
