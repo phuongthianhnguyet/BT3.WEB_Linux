@@ -203,14 +203,14 @@ networks:
 
 <img width="1919" height="974" alt="image" src="https://github.com/user-attachments/assets/f3e37eac-f51b-4c98-8258-7b04db730662" />
 
-- Website chính: `http://phuonganhnguyet.com`
-- Node-red: `http://phuonganhnguyet.com/nodered`
+#### Website chính: `http://phuonganhnguyet.com`
+#### Node-red: `http://phuonganhnguyet.com/nodered`
 
 <img width="1914" height="968" alt="image" src="https://github.com/user-attachments/assets/8f73f439-5e12-4379-aa9a-32bb4247f5ac" />
 
 ## 5. Lập trình web Frontend + backend 
 
-Wep chính thức: `http://phuonganhnguyet.com`
+#### Wep chính thức: `http://phuonganhnguyet.com`
 
 <img width="1730" height="970" alt="image" src="https://github.com/user-attachments/assets/e8b960ad-4916-4918-91c4-2083cdbe93c3" />
 
@@ -236,7 +236,6 @@ Curl `http://phuonganhnguyet.com/api/nhom-san-pham`
 
 <img width="784" height="105" alt="image" src="https://github.com/user-attachments/assets/3a0873c5-a67d-4ee1-b943-fbe6eaa14206" />
 
-#### Test API
 
 <img width="695" height="754" alt="image" src="https://github.com/user-attachments/assets/fd9df7bf-7322-4e8c-96db-1257eef52a1b" />
 
@@ -246,16 +245,5 @@ Curl `http://phuonganhnguyet.com/api/nhom-san-pham`
   
 #### Trang chủ và các sản phẩm 
 
-  <img width="873" height="951" alt="image" src="https://github.com/user-attachments/assets/0ac9d410-63de-47b2-8918-fc8bf191875c" />
-
-#### Đơn hàng được thêm vào giỏ hàng.
-
-<img width="871" height="957" alt="image" src="https://github.com/user-attachments/assets/0072e3c3-25db-4efd-b5b8-a4edbaf73f59" />
-
-### Tổng Kết
-Qua bài tập em đã:
-- Tự cài đặt và cấu hình Docker trên Ubuntu
-- Sử dụng `Docker-compose` quản lí nhiều dịch vụ
-- Xây dựng Web
-Tuy bài làm chưa được hoàn chỉnh và còn rất nhiều thiếu xót, em xin cảm ơn thầy đã quan tâm và chỉ dạy em suốt kì học vừa qua!
+  <img width="87sót, em xin cảm ơn thầy đã quan tâm và chỉ dạy em suốt kì học vừa qua!
 ## THE END
