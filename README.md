@@ -69,7 +69,7 @@ Truy cập link: `Ubuntu 22.04.5 LTS – Microsoft Store` để tải ubuntu.
 ## 3. Cài đặt các Docker container (dùng file docker-compose.yml)
 Tạo file `docker-compose.yml` để cài đặt các docker container
 
-`version: '3.8'
+```version: '3.8'
 services:
   mariadb:
     image: mariadb:10.11
@@ -185,8 +185,8 @@ services:
 
 networks:
   banhang-network:
-    driver: bridge`
-    
+    driver: bridge
+ ```
 - Sau khi tạo file `docker-compose.yml`, khởi động lại tất cả container bằng cách chạy lệnh `docker compose up -d` trong thư mục chứa file `docker-compose.yml`
 
 <img width="1465" height="219" alt="Ảnh chụp màn hình 2025-11-07 022055" src="https://github.com/user-attachments/assets/4e28ed63-b945-4287-a5de-0f58ea8584ee" />
@@ -196,9 +196,8 @@ networks:
 <img width="1482" height="293" alt="image" src="https://github.com/user-attachments/assets/4d68ae88-b6c9-4e62-8125-77441253bf92" />
 
 ## 4. Cấu hình Docker-compose.
-### Bước 1: Tạo file cấu hình `docker-compose.yml`
 
-### `172.21.143.29:8080` phpAdmin:
+- `172.21.143.29:8080` phpAdmin:
 
 <img width="1789" height="1001" alt="image" src="https://github.com/user-attachments/assets/0a9af839-4733-411a-9feb-11898cc2eb4d" />
 
@@ -210,35 +209,53 @@ networks:
 <img width="1914" height="968" alt="image" src="https://github.com/user-attachments/assets/8f73f439-5e12-4379-aa9a-32bb4247f5ac" />
 
 ## 5. Lập trình web Frontend + backend 
-### Các API backend
-- `http://phuonganhnguyet.com/api/san-pham-ban-chay`
-
-<img width="1845" height="965" alt="image" src="https://github.com/user-attachments/assets/cba1c077-0ba2-4c23-89ed-210b15df6d82" />
 
 Wep chính thức: `http://phuonganhnguyet.com`
 
 <img width="1730" height="970" alt="image" src="https://github.com/user-attachments/assets/e8b960ad-4916-4918-91c4-2083cdbe93c3" />
 
-### Node-Red: http://phuonganhnguyet.com/nodered
+### Node-Red: 
+
+#### Đăng Nhập : API /login – Xác thực người dùng
 
 <img width="1015" height="978" alt="image" src="https://github.com/user-attachments/assets/a0d0599f-394d-49cf-b928-c363688eaab3" />
- 
-Mariadb
 
+<img width="1283" height="356" alt="image" src="https://github.com/user-attachments/assets/3365ee6a-aca6-4da2-b948-96a0aec2284e" />
 
+### Các API backend
 
+#### Sản phẩm bán chạy
 
+Curl `http://phuonganhnguyet.com/api/san-pham-ban-chay`
 
+<img width="1845" height="965" alt="image" src="https://github.com/user-attachments/assets/cba1c077-0ba2-4c23-89ed-210b15df6d82" />
 
+#### Nhóm sản phẩm
 
+Curl `http://phuonganhnguyet.com/api/nhom-san-pham`
 
+<img width="784" height="105" alt="image" src="https://github.com/user-attachments/assets/3a0873c5-a67d-4ee1-b943-fbe6eaa14206" />
 
+#### Test API
 
+<img width="695" height="754" alt="image" src="https://github.com/user-attachments/assets/fd9df7bf-7322-4e8c-96db-1257eef52a1b" />
 
-
-
-
-
+### node-### MariaDB
 
   <img width="1919" height="963" alt="image" src="https://github.com/user-attachments/assets/c459441b-935d-489b-8cd6-4c612333f2a5" />
+  
+#### Trang chủ và các sản phẩm 
 
+  <img width="873" height="951" alt="image" src="https://github.com/user-attachments/assets/0ac9d410-63de-47b2-8918-fc8bf191875c" />
+
+#### Đơn hàng được thêm vào giỏ hàng.
+
+<img width="871" height="957" alt="image" src="https://github.com/user-attachments/assets/0072e3c3-25db-4efd-b5b8-a4edbaf73f59" />
+
+### Tổng Kết
+Qua bài tập em đã:
+- Tự cài đặt và cấu hình Docker trên Ubuntu
+- Sử dụng `Docker-compose` quản lí nhiều dịch vụ
+- Xây dựng Web
+Tuy bài làm chưa được hoàn chỉnh và còn rất nhiều thiếu xót, em xin cảm ơn thầy đã quan tâm và chỉ dạy em suốt kì học vừa qua!
+## THE END
